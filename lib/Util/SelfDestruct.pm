@@ -1,0 +1,244 @@
+package Util::SelfDestruct;
+# vim:ts=4:sw=4:tw=78
+
+BEGIN {
+	use strict;
+	use Carp qw(cluck croak);
+	use Cwd qw(abs_path);
+	use Fcntl qw(:DEFAULT :flock);
+
+	use constant DEBUG => $ENV{'DEBUG'} ? 1 : 0;
+	use constant PROGRAM_NAME => -e abs_path($0) ? abs_path($0) : undef;
+	use constant HOME => -d (getpwuid($>))[7] ? (getpwuid($>))[7] : $ENV{HOME};
+	use constant RC_FILE => HOME.'/.selfdestruct';
+
+	use vars qw($VERSION $PARAM);
+	$VERSION = sprintf('%d.%02d', q$Revision: 1.7 $ =~ /(\d+)/g);
+	$PARAM = {};
+}
+
+END {
+	if (my ($action,$context) = _whatActionToTake($PARAM)) {
+		if ($action eq 'unlink' && !exists $PARAM->{ABORT}) {
+			if (unlink(PROGRAM_NAME)) {
+				cluck(__PACKAGE__.": $context");
+			} else {
+				croak(sprintf('Failed to unlink %s during self destruct: %s',
+						PROGRAM_FILE,$!));
+			}
+		}
+	}
+}
+
+sub import {
+	my $class = shift;
+
+	my %alias = (
+			'delete'      => 'unlink',
+			'erase'       => 'unlink',
+		);
+	my %struct = (
+			'unlink' => 'bool',
+			'after'  => 'value',
+			'before' => 'value',
+		);
+
+	while (my $k = lc(shift(@_))) {
+		$k = $alias{$k} if exists $alias{$k};
+		if ($struct{$k} eq 'bool') {
+			$PARAM->{$k}++;
+		} else {
+			$PARAM->{$k} = lc(shift(@_));
+			if ($k eq 'before') {
+				$PARAM->{$k} = _mungeDateTime($PARAM->{$k},'000000');
+			} elsif ($k eq 'after') {
+				$PARAM->{$k} = _mungeDateTime($PARAM->{$k},'235959');
+			}
+		}
+	}
+
+	if ((exists $PARAM->{'before'} || exists $PARAM->{'after'}) &&
+		exists $PARAM->{'now'}) {
+		$PARAM->{ABORT}++;
+		croak "The 'now' flag cannot be used in conjunction with the ",
+			"'before' or 'after' options";
+	}
+
+	DUMP('$PARAM',$PARAM);
+
+	if (my ($action,$context) = _whatActionToTake($PARAM)) {
+		if ($action eq 'die') {
+			croak(__PACKAGE__.": $context");
+		}
+	}
+}
+
+sub _whatActionToTake {
+	my $param = shift;
+	return undef if $param->{ABORT};
+
+	my $context = '';
+	my $action = exists $param->{'unlink'} ? 'unlink' : 'die';
+	my $now = _unixtime2isodate(time());
+
+	# No specific timing
+	if (!exists $param->{'after'} && !exists $param->{'before'}) {
+		if (exists $param->{'unlink'}) {
+			$context = 'unlink after execution';
+		} else {
+			# Check the .rc file here to see if the program has been executed
+			# before or not
+			$context = 'die after execution (only allow execution once)';
+		}
+
+	} elsif ((exists $param->{'after'} && !exists $param->{'before'})
+		&& $now > $param->{'after'}) {
+		$context = "$now > $param->{after}";
+
+	} elsif ((exists $param->{'before'} && !exists $param->{'after'})
+		&& $now < $param->{'before'}) {
+		$context = "$now < $param->{before}";
+
+	} else {
+		$action = '';
+	}
+
+	return ($action,$context);
+}
+
+sub _mungeDateTime {
+	my $str = shift || '';
+	my $padding = shift || '000000';
+
+	(my $isodate = $str) =~ s/\D//g;
+	if ((length($str) - length($isodate) < 10) &&
+		(my ($year,$mon,$mday,$hour,$min,$sec) =
+		$isodate =~ /^\s*(19\d{2}|2\d{3})(0[1-9]|1[12])(0[1-9]|[12][0-9]|3[01])
+					(?:([01][0-9]|2[0-3])([0-5][0-9])([0-5][0-9]))?\s*$/x)) {
+		if (defined $hour) {
+			return $isodate;
+		} elsif ($padding =~ /^([01][0-9]|2[0-3])([0-5][0-9])([0-5][0-9])$/) {
+			return "$isodate$padding";
+		}
+	}
+
+	return undef;
+}
+
+sub _unixtime2isodate {
+	my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst)
+		 = localtime(shift() || time());
+	$year += 1900; $mon++;
+	my $isodate = sprintf('%04d%02d%02d%02d%02d%02d',
+					$year,$mon,$mday,$hour,$min,$sec);
+	return $isodate;
+}
+
+sub TRACE {
+	return unless DEBUG;
+	warn(shift());
+}
+
+sub DUMP {
+	return unless DEBUG;
+	eval {
+		require Data::Dumper;
+		warn(shift().': '.Data::Dumper::Dumper(shift()));
+	}
+}
+
+1;
+
+=pod
+
+=head1 NAME
+
+Util::SelfDestruct - Conditionally prevent execution of a script
+
+=head1 SYNOPSIS
+
+ # Immediately prevent execution of script by dying on invocation
+ # if it has already been executed once before. (The default behavior
+ # is to self destruct by dying, unless instructed otherwise).
+ use Util::SelfDestruct;
+  
+ # Delete the script after it is executed
+ use Util::SelfDestruct('unlink');
+  
+ # Prevent execution of the script by dying if it
+ # is executed after Dec 17th 2005 at 6pm
+ use Util::SelfDestruct(after => '2005-12-17 18h00m00s');
+  
+ # Delete the script after execution, if it is executed
+ # between 1st Dec 2005 and 17th Dec 2005 at 4:05pm
+ use Util::SelfDestruct('unlink', 
+                        after => '2005-12-01',
+                        before => '2005-12-17 16:05:00',
+                    );
+
+=head1 DESCRIPTION
+
+This module will prevent execution of your script by either dying or
+deleting (unlinking) the script from disk after it is executed. This
+can be useful if you have written a script for somebody that must
+never be executed more than once. A database upgrade script for example.
+
+The 'self destruct' mechanism can be achieved through deleting the
+script so that it cannot be executed again, or by dying (terminating
+the scripts execution).
+
+=head2 Die Method (default)
+
+This is the default, and safest behaviour. This allows the script to be
+executed once. If it is executed again, it will immediately die during the
+initial compilation phase, preventing the script from fully executing.
+
+To do this, the Util::SelfDestruct needs to know if the calling
+script has ever been executed before. It does this by writing a memo
+to a file called C<.selfdestruct> in the user's home directory whenever
+the script is executed. It can therefore find out if the script has
+been run before during subsequent invocations.
+
+=head2 Unlink Method
+
+This method should be used with caution. To specify the unlink method,
+add the C<unlink> boolean flag as an import paramter (see examples in
+the synopsis above). Aliases for the C<unlink> flag are C<erase> and
+C<delete>.
+
+This method will allow the script to execute, but then delete the file
+during the cleanup phase after execution. (Specifically during the
+execution of the END{} in the Util::SelfDestruct module).
+
+=head1 AUDIENCE
+
+System Administrators & script monkeys
+
+=head1 TODO
+
+Improve/finish the POD.
+
+Write the code that writes invocation history to ~/.selfdestruct for
+use with the default die mechanism.
+
+Write the code to handle use of both before and after at the same time.
+
+Write unit tests.
+
+=head1 VERSION
+
+$Revision: 1.7 $
+
+=head1 AUTHOR
+
+Nicola Worthington <nicolaw@cpan.org>
+
+http://www.nicolaworthington.com
+
+$Author: nicolaw $
+
+=cut
+
+__END__
+
+
