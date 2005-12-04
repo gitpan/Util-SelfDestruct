@@ -13,7 +13,7 @@ BEGIN {
 	use constant RC_FILE => HOME.'/.selfdestruct';
 
 	use vars qw($VERSION $PARAM);
-	$VERSION = sprintf('%d.%02d', q$Revision: 1.7 $ =~ /(\d+)/g);
+	$VERSION = sprintf('%d.%02d', q$Revision: 1.8 $ =~ /(\d+)/g);
 	$PARAM = {};
 }
 
@@ -174,7 +174,7 @@ Util::SelfDestruct - Conditionally prevent execution of a script
  use Util::SelfDestruct('unlink', 
                         after => '2005-12-01',
                         before => '2005-12-17 16:05:00',
-                    );
+                   );
 
 =head1 DESCRIPTION
 
@@ -227,7 +227,7 @@ Write unit tests.
 
 =head1 VERSION
 
-$Revision: 1.7 $
+$Revision: 1.8 $
 
 =head1 AUTHOR
 
