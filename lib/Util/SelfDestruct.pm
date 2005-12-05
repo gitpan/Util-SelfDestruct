@@ -13,7 +13,7 @@ BEGIN {
 	use constant RC_FILE => HOME.'/.selfdestruct';
 
 	use vars qw($VERSION $PARAM);
-	$VERSION = sprintf('%d.%02d', q$Revision: 1.10 $ =~ /(\d+)/g);
+	$VERSION = sprintf('%d.%02d', q$Revision: 1.11 $ =~ /(\d+)/g);
 	$PARAM = {};
 }
 
@@ -129,6 +129,10 @@ sub _whatActionToTake {
 		} else {
 			$action = '';
 		}
+
+	} elsif ((exists $param->{'after'} && exists $param->{'before'})
+		&& $now > $param->{'after'} && $now < $param->{'before'}) {
+		$context = "$now > $param->{after} and $now < $param->{before}";
 
 	} elsif ((exists $param->{'after'} && !exists $param->{'before'})
 		&& $now > $param->{'after'}) {
@@ -249,6 +253,34 @@ This method will allow the script to execute, but then delete the file
 during the cleanup phase after execution. (Specifically during the
 execution of the END{} in the Util::SelfDestruct module).
 
+=head2 Before & After Qualifiers
+
+The default behavior of Util::SelfDestruct is to only allow a script to
+execute once, through either deletion of the script itself, or by dying
+on all subsqeuent invocations after it's first execution.
+
+Instead of this default behaviour, the C<before> and C<after> options allow
+conditional timing of when the script will self destruct. Specifying
+C<before> will cause the script to self destruct if executed before the
+specified date and time. Likewise, the C<after> option will cause the
+script to self destruct if executed after the specified date. They can also
+be used in conjunction with eachother to specify a finite time frame.
+
+Examples of valid date time formats are as follows:
+
+ YYYYMMDDHHMMSS
+ YYYYMMDD
+ 
+ YYYY-MM-DD HH:MM:SS
+ YYYY-MM-DD
+
+Any non-numeric characters will be removed from the date time string before
+it is parsed. This allows more pleasing formatting to be used.
+
+If only a date is specified and not a time, 00:00:00 is assumed in the case
+of the C<before> option, and 23:59:59 is assumes in the case of the C<after>
+option.
+
 =head1 AUDIENCE
 
 System Administrators & script monkeys
@@ -263,7 +295,7 @@ Write unit tests.
 
 =head1 VERSION
 
-$Revision: 1.10 $
+$Revision: 1.11 $
 
 =head1 AUTHOR
 
