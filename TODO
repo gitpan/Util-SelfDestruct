@@ -1,8 +1,5 @@
 Improve/finish the POD.
 
-Write the code that writes invocation history to ~/.selfdestruct for
-use with the default die mechanism.
-
 Write the code to handle use of both before and after at the same time.
 
 Write unit tests.

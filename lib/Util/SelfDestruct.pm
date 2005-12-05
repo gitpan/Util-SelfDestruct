@@ -13,7 +13,7 @@ BEGIN {
 	use constant RC_FILE => HOME.'/.selfdestruct';
 
 	use vars qw($VERSION $PARAM);
-	$VERSION = sprintf('%d.%02d', q$Revision: 1.8 $ =~ /(\d+)/g);
+	$VERSION = sprintf('%d.%02d', q$Revision: 1.10 $ =~ /(\d+)/g);
 	$PARAM = {};
 }
 
@@ -71,6 +71,45 @@ sub import {
 			croak(__PACKAGE__.": $context");
 		}
 	}
+	_writeExecHistory() unless exists $PARAM->{'unlink'};
+}
+
+sub _writeExecHistory {
+	return _processExecHistory('write');
+}
+
+sub _readExecHistory {
+	return _processExecHistory('read');
+}
+
+sub _processExecHistory {
+	my $action = shift || 'read';
+
+	my $matchInFile = 0;
+	my $programName = PROGRAM_NAME;
+	my $mode = (-e RC_FILE ? '+<' : '+>');
+
+	if (open(FH,$mode,RC_FILE) && flock(FH,LOCK_EX)) {
+		#seek(FH, 0, 0);
+		while (my $str = <FH>) {
+			chomp $str;;
+			if ($str eq $programName) {
+				$matchInFile++;
+				last;
+			}
+		}
+		if ($action eq 'write' && !$matchInFile) {
+			print FH "$programName\n";
+		}
+		(flock(FH,LOCK_UN) && close(FH)) ||
+			cluck(sprintf("Unable to close file handle FH for file %s: %s", RC_FILE,$!));
+
+	} else {
+		croak(sprintf("Unable to open file handle FH with exclusive lock for file '%s': %s",
+				RC_FILE,$!));
+	}
+
+	return $matchInFile;
 }
 
 sub _whatActionToTake {
@@ -85,10 +124,10 @@ sub _whatActionToTake {
 	if (!exists $param->{'after'} && !exists $param->{'before'}) {
 		if (exists $param->{'unlink'}) {
 			$context = 'unlink after execution';
+		} elsif (_readExecHistory() > 0) {
+			$context = 'die on subsequent execution (only allow execution once)';
 		} else {
-			# Check the .rc file here to see if the program has been executed
-			# before or not
-			$context = 'die after execution (only allow execution once)';
+			$action = '';
 		}
 
 	} elsif ((exists $param->{'after'} && !exists $param->{'before'})
@@ -218,16 +257,13 @@ System Administrators & script monkeys
 
 Improve/finish the POD.
 
-Write the code that writes invocation history to ~/.selfdestruct for
-use with the default die mechanism.
-
 Write the code to handle use of both before and after at the same time.
 
 Write unit tests.
 
 =head1 VERSION
 
-$Revision: 1.8 $
+$Revision: 1.10 $
 
 =head1 AUTHOR
 
