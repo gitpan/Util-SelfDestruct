@@ -13,7 +13,7 @@ BEGIN {
 	use constant RC_FILE => HOME.'/.selfdestruct';
 
 	use vars qw($VERSION $PARAM);
-	$VERSION = sprintf('%d.%02d', q$Revision: 1.11 $ =~ /(\d+)/g);
+	$VERSION = sprintf('%d.%02d', q$Revision: 1.13 $ =~ /(\d+)/g);
 	$PARAM = {};
 }
 
@@ -281,29 +281,29 @@ If only a date is specified and not a time, 00:00:00 is assumed in the case
 of the C<before> option, and 23:59:59 is assumes in the case of the C<after>
 option.
 
-=head1 AUDIENCE
-
-System Administrators & script monkeys
-
 =head1 TODO
 
-Improve/finish the POD.
-
-Write the code to handle use of both before and after at the same time.
+Improve the POD.
 
 Write unit tests.
 
 =head1 VERSION
 
-$Revision: 1.11 $
+$Id: SelfDestruct.pm,v 1.13 2005/12/08 15:14:12 nicolaw Exp $
 
 =head1 AUTHOR
 
 Nicola Worthington <nicolaw@cpan.org>
 
-http://www.nicolaworthington.com
+http://perlgirl.org.uk
 
-$Author: nicolaw $
+=head1 COPYRIGHT
+
+(c) Nicola Worthington 2005. This program is free software; you can
+redistribute it and/or modify it under the GNU GPL.
+
+See the file COPYING in this distribution, or
+http://www.gnu.org/licenses/gpl.txt 
 
 =cut
 
