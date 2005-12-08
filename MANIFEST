@@ -3,6 +3,6 @@ COPYING
 META.yml
 MANIFEST
 Makefile.PL
-TODO
 README
 lib/Util/SelfDestruct.pm
+t/01tests.t

@@ -13,7 +13,7 @@ BEGIN {
 	use constant RC_FILE => HOME.'/.selfdestruct';
 
 	use vars qw($VERSION $PARAM);
-	$VERSION = sprintf('%d.%02d', q$Revision: 1.13 $ =~ /(\d+)/g);
+	$VERSION = sprintf('%d.%02d', q$Revision: 1.15 $ =~ /(\d+)/g);
 	$PARAM = {};
 }
 
@@ -54,6 +54,7 @@ sub import {
 			} elsif ($k eq 'after') {
 				$PARAM->{$k} = _mungeDateTime($PARAM->{$k},'235959');
 			}
+			delete $PARAM->{$k} unless defined $PARAM->{$k};
 		}
 	}
 
@@ -281,15 +282,9 @@ If only a date is specified and not a time, 00:00:00 is assumed in the case
 of the C<before> option, and 23:59:59 is assumes in the case of the C<after>
 option.
 
-=head1 TODO
-
-Improve the POD.
-
-Write unit tests.
-
 =head1 VERSION
 
-$Id: SelfDestruct.pm,v 1.13 2005/12/08 15:14:12 nicolaw Exp $
+$Id: SelfDestruct.pm,v 1.15 2005/12/08 21:27:31 nicolaw Exp $
 
 =head1 AUTHOR
 
