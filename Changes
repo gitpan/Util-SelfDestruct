@@ -1,0 +1,11 @@
+Version 1.16 - 29th December 2005
+    + Added Changes file.
+
+    + Modified Makefile.PL to send anonymous information to
+      http://perlgirl.org.uk/lib/usage.cgi if the user
+      agrees. This is so I can track which of my modules
+      are most heavily used and on what platforms, so I can
+      concentrate on maintaning the most popular ones in
+      my limited spare time.
+
+

@@ -1,3 +1,25 @@
+############################################################
+# $Id: Util::SelfDestruct,v 1.35 2005/05/29 10:19:09 nicolaw Exp $
+# Util::SelfDestruct - Conditionally prevent execution of a script
+# Copyright: (c)2005 Nicola Worthington. All rights reserved.
+############################################################
+# This file is part of Util::SelfDestruct.
+#
+# Util::SelfDestruct is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# Util::SelfDestruct is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Util::SelfDestruct; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
+############################################################
+
 package Util::SelfDestruct;
 # vim:ts=4:sw=4:tw=78
 
@@ -13,7 +35,7 @@ BEGIN {
 	use constant RC_FILE => HOME.'/.selfdestruct';
 
 	use vars qw($VERSION $PARAM);
-	$VERSION = sprintf('%d.%02d', q$Revision: 1.15 $ =~ /(\d+)/g);
+	$VERSION = sprintf('%d.%02d', q$Revision: 1.16 $ =~ /(\d+)/g);
 	$PARAM = {};
 }
 
@@ -284,13 +306,13 @@ option.
 
 =head1 VERSION
 
-$Id: SelfDestruct.pm,v 1.15 2005/12/08 21:27:31 nicolaw Exp $
+$Id: SelfDestruct.pm,v 1.16 2005/12/29 17:29:10 nicolaw Exp $
 
 =head1 AUTHOR
 
 Nicola Worthington <nicolaw@cpan.org>
 
-http://perlgirl.org.uk
+L<http://perlgirl.org.uk>
 
 =head1 COPYRIGHT
 
@@ -298,7 +320,7 @@ http://perlgirl.org.uk
 redistribute it and/or modify it under the GNU GPL.
 
 See the file COPYING in this distribution, or
-http://www.gnu.org/licenses/gpl.txt 
+L<http://www.gnu.org/licenses/gpl.txt>
 
 =cut
 
