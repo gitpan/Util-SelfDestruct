@@ -1,3 +1,11 @@
+Version 1.19 - 7th January 2006
+    + Added Test::Pod and Test::Pod::Coverage
+      unit tests.
+
+Version 1.18 - 30th December 2005
+    + Changed license to Apache 2.0
+      http://www.apache.org/licenses/LICENSE-2.0
+
 Version 1.16 - 29th December 2005
     + Added Changes file.
 

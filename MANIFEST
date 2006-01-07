@@ -1,9 +1,12 @@
 Changes
 INSTALL
-COPYING
+NOTICE
+LICENSE
 META.yml
 MANIFEST
 Makefile.PL
 README
-lib/Util/SelfDestruct.pm
+t/02pod_coverage.t
 t/01tests.t
+t/01pod.t
+lib/Util/SelfDestruct.pm
