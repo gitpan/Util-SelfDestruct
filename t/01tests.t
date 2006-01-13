@@ -2,7 +2,14 @@
 chdir('t') if -d 't';
 
 use Config;
-use Test::More tests => 12;
+use Test::More;
+
+if ($^O =~ /win32/i) {
+	plan skip_all => "01test.t unit tests will not work under MSWin32";
+} else {
+	plan tests => 12;
+}
+
 use File::Spec::Functions qw(catdir);
 
 my $perl = '#!/bin/env perl';

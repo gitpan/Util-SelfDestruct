@@ -1,0 +1,135 @@
+2006-01-12  nicolaw
+
+	* Changes (1.4): Version 1.20
+
+2006-01-12  nicolaw
+
+	* lib/Util/SelfDestruct.pm (1.20): Incrementing version for unit
+	  test fixes new release
+
+2006-01-12  nicolaw
+
+	* t/01tests.t (1.4): Skip tests which include redirection and
+	  backticks etc to skip under win32 because they won't work properly
+
+2006-01-12  nicolaw
+
+	* t/02pod_coverage.t (1.2): Fixed to run the correct
+	  Test::Pod::Coverage code
+
+2006-01-12  nicolaw
+
+	* MANIFEST (1.9): Added TODO and ChangeLog
+
+2006-01-07  nicolaw
+
+	* lib/Util/SelfDestruct.pm (1.19): Added 2006 to copyright noticed
+	  for 2006 release including POD unit tests
+
+2006-01-07  nicolaw
+
+	* MANIFEST (1.8), Changes (1.3): Added POD unit tests
+
+2006-01-07  nicolaw
+
+	* t/: 01pod.t (1.1), 02pod_coverage.t (1.1): Adding
+
+2006-01-01  nicolaw
+
+	* Makefile.PL (1.4): Changed to only print the first 500 characters
+	  returned from perlgirl.org.uk
+
+2005-12-30  nicolaw
+
+	* lib/Util/SelfDestruct.pm (1.18): Change license to Apache 2.0
+
+2005-12-30  nicolaw
+
+	* Changes (1.2): Changed license to Apache 2.0
+
+2005-12-30  nicolaw
+
+	* doit (1.5): Standard build script
+
+2005-12-30  nicolaw
+
+	* COPYING (1.2): Deleteing
+
+2005-12-30  nicolaw
+
+	* MANIFEST (1.7), NOTICE (1.1): Added NOTICE and LICENSE
+
+2005-12-30  nicolaw
+
+	* LICENSE (1.1): Adding
+
+2005-12-29  nicolaw
+
+	* lib/Util/SelfDestruct.pm (1.16): Changed POD
+
+2005-12-29  nicolaw
+
+	* Makefile.PL (1.3): Added reporting back to perlgirl.org.uk
+
+2005-12-08  nicolaw
+
+	* t/01tests.t (1.3): Finished basic tests
+
+2005-12-08  nicolaw
+
+	* t/01tests.t (1.1): Added
+
+2005-12-08  nicolaw
+
+	* lib/Util/SelfDestruct.pm (1.13): Changed the POD
+
+2005-12-05  nicolaw
+
+	* lib/Util/SelfDestruct.pm (1.11): Added more POD for before and
+	  after, and support for both before and after to be used at the same
+	  time.
+
+2005-12-05  nicolaw
+
+	* lib/Util/SelfDestruct.pm (1.9): Added code to track execution of
+	  script
+
+2005-12-04  nicolaw
+
+	* TODO (1.2): Updated
+
+2005-12-04  nicolaw
+
+	* README (1.2): Added with read info in int :)
+
+2005-12-04  nicolaw
+
+	* META.yml (1.5), lib/Util/SelfDestruct.pm (1.7): Added POd
+
+2005-12-04  nicolaw
+
+	* lib/Util/SelfDestruct.pm (1.6): Getting there...
+
+2005-12-04  nicolaw
+
+	* lib/Util/SelfDestruct.pm (1.5): New interface
+
+2005-12-03  nicolaw
+
+	* lib/Util/SelfDestruct.pm (1.3): Changed from Acme to Util
+
+2005-12-03  nicolaw
+
+	* MANIFEST (1.3), Makefile.PL (1.2): Changed from Acme to Util init
+	  :)
+
+2005-12-03  nicolaw
+
+	* MANIFEST (1.2), META.yml (1.2): Fixed manifest
+
+2005-12-03  nicolaw
+
+	* COPYING (1.1), INSTALL (1.1), MANIFEST (1.1), META.yml (1.1),
+	  Makefile.PL (1.1), README (1.1), TODO (1.1), doit (1.1),
+	  lib/Util/SelfDestruct.pm (1.1): Adding
+

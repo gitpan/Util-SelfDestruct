@@ -1,6 +1,6 @@
 ############################################################
 #
-#   $Id: SelfDestruct.pm,v 1.19 2006/01/07 12:26:55 nicolaw Exp $
+#   $Id: SelfDestruct.pm,v 1.20 2006/01/12 22:45:11 nicolaw Exp $
 #   Util::SelfDestruct - Conditionally prevent execution of a script
 #
 #   Copyright 2005,2006 Nicola Worthington
@@ -34,7 +34,7 @@ BEGIN {
 	use constant RC_FILE => HOME.'/.selfdestruct';
 
 	use vars qw($VERSION $PARAM);
-	$VERSION = sprintf('%d.%02d', q$Revision: 1.19 $ =~ /(\d+)/g);
+	$VERSION = sprintf('%d.%02d', q$Revision: 1.20 $ =~ /(\d+)/g);
 	$PARAM = {};
 }
 
@@ -305,7 +305,7 @@ option.
 
 =head1 VERSION
 
-$Id: SelfDestruct.pm,v 1.19 2006/01/07 12:26:55 nicolaw Exp $
+$Id: SelfDestruct.pm,v 1.20 2006/01/12 22:45:11 nicolaw Exp $
 
 =head1 AUTHOR
 
@@ -324,5 +324,6 @@ L<http://www.apache.org/licenses/LICENSE-2.0>
 =cut
 
 __END__
+
 
 
