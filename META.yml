@@ -1,11 +1,19 @@
-# http://module-build.sourceforge.net/META-spec.html
-#XXXXXXX This is a prototype!!!  It will change in the future!!! XXXXX#
-name:         Util-SelfDestruct
-version:      1.20
-version_from: lib/Util/SelfDestruct.pm
-installdirs:  site
+---
+name: Util-SelfDestruct
+version: 1.21
+author:
+  - Nicola Worthington <nicolaw@cpan.org>
+abstract: Conditionally prevent execution of a script
+license: open_source
 requires:
-    Carp:                          0
-
-distribution_type: module
-generated_by: ExtUtils::MakeMaker version 6.17
+  Carp: 0
+build_requires:
+  Test: 0
+  Test::More: 0
+  Test::Pod: 0
+  Test::Pod::Coverage: 0
+provides:
+  Util::SelfDestruct:
+    file: lib/Util/SelfDestruct.pm
+    version: 1.21
+generated_by: Module::Build version 0.2611
